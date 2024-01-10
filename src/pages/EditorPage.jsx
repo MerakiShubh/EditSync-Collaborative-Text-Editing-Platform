@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
 import { initSocket } from "../socket.jsx";
-import { ACTIONS } from "./Actions.jsx";
+import { ACTIONS } from "./Actions";
 import {
   useLocation,
   useNavigate,
@@ -12,6 +12,7 @@ import {
 import toast from "react-hot-toast";
 
 const EditorPage = () => {
+  const [clients, setClients] = useState([]);
   const socketRef = useRef(null);
   const location = useLocation();
   const { roomId } = useParams();
@@ -35,14 +36,26 @@ const EditorPage = () => {
         roomId,
         username: location.state?.username,
       });
+
+      //listening for joined event
+
+      socketRef.current.on(
+        ACTIONS.JOINED,
+        ({ clients, username, socketId }) => {
+          if (username != location.state?.username) {
+            toast.success(`${username} joined the room`);
+          }
+          setClients(clients);
+        }
+      );
     };
     init();
   }, []);
 
-  const [clients, setClients] = useState([
-    { socketId: 1, username: "Rakesh k" },
-    { socketId: 2, username: "John doe" },
-  ]);
+  // const [clients, setClients] = useState([
+  //   { socketId: 1, username: "Rakesh k" },
+  //   { socketId: 2, username: "John doe" },
+  // ]);
 
   if (!location.state) {
     return <Navigate to="/" />;
