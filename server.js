@@ -18,7 +18,8 @@ function getAllConnectedClients(roomId) {
     (socketId) => {
       return {
         socketId,
-        username: userSocketMap.socketId,
+        //Here socket id is dynamic since it different for different user hence we are getting here it dynamically
+        username: userSocketMap[socketId],
       };
     }
   );
@@ -36,6 +37,7 @@ io.on("connection", (socket) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
+    // console.log(clients);
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit("joined", {
         clients,
@@ -52,9 +54,9 @@ io.on("connection", (socket) => {
         socketId: socket.id,
         username: userSocketMap[socket.id],
       });
-      delete userSocketMap[socket.id];
-      socket.leave();
     });
+    delete userSocketMap[socket.id];
+    socket.leave();
   });
 });
 
