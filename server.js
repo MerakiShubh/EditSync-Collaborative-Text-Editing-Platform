@@ -29,7 +29,10 @@ function getAllConnectedClients(roomId) {
 io.on("connection", (socket) => {
   console.log("Socket is connected", socket.id);
 
+  // Listening join event from edtiorpage
+
   socket.on("join", ({ roomId, username }) => {
+    // console.log(`socketId from roomID ${roomId}`);
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
@@ -39,6 +42,18 @@ io.on("connection", (socket) => {
         username,
         socketId: socket.id,
       });
+    });
+  });
+
+  socket.on("disconnecting", () => {
+    const rooms = [...socket.rooms];
+    rooms.forEach((roomId) => {
+      socket.in(roomId).emit("disconnected", {
+        socketId: socket.id,
+        username: userSocketMap[socket.id],
+      });
+      delete userSocketMap[socket.id];
+      socket.leave();
     });
   });
 });
