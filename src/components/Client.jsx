@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "react-avatar";
 const Client = ({ username }) => {
+  // console.log("username from client", username);
   return (
     <div className="client">
       <Avatar name={username} size={50} round="14px" color="#4aed88" />

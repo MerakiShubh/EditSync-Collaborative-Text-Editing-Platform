@@ -35,7 +35,7 @@ const Home = () => {
     <div className="homePageWrapper">
       <div className="formWrapper">
         <img src="/code-sync.png" alt="" className="homePageLogo" />
-        <h4 className="mainLabel">Pasete invitation ROOM ID</h4>
+        <h4 className="mainLabel">Paste invitation ROOM ID</h4>
         <div className="inputGroup">
           <input
             value={roomId}
