@@ -47,6 +47,12 @@ io.on("connection", (socket) => {
     });
   });
 
+  //listening to code in others text editor
+
+  socket.on("code-change", ({ roomId, code }) => {
+    socket.in(roomId).emit("code-change", { code });
+  });
+
   socket.on("disconnecting", () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {
