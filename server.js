@@ -3,10 +3,15 @@ const { Socket } = require("engine.io-client");
 const express = require("express");
 const app = express();
 const http = require("http");
+const path = require("path");
 // const cors = require("cors");
 const { Server } = require("socket.io");
 // const { ACTIONS } = require("./src/pages/Actions.jsx");
 
+app.use(express.static("dist"));
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 const server = http.createServer(app);
 
 const io = new Server(server);
